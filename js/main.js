@@ -25,68 +25,31 @@ const users = [
 
 const CARD_SECTION = document.getElementById('profiles');
 
-////////////////////////////////////////
-// - Obtener la info
-// - Crear un contenedor para perfil clase = profile
-// - Crear elemento para user_name
-// - "" "" para description 
-// - "" "" age
-///  - "" " " lista de bandas. --> iterar por cada banda
-
-const createCard = () => {
+const userInfo = (usuario) => {
     const card = document.createElement('div');
     card.classList.add('profile', 'container');
-    return card;
-}
-
-
-const createDescription = () => {
     const userElements = {
         user_name: document.createElement('h2'),
         age: document.createElement('h3'),
         description: document.createElement('p'),
-        bands: [],
-    }
-    return userElements;
+        bandsList: document.createElement('ul'),
+        bands: []
+    };
+    userElements.user_name.textContent = usuario.user_name;
+    userElements.age.textContent = usuario.age;
+    userElements.description.textContent = usuario.description;
+    usuario.fav_music.bands.forEach(band => {
+        const liElement = document.createElement('li');
+        liElement.textContent = band;
+        userElements.bandsList.appendChild(liElement);
+    });
+    card.append(userElements.user_name, userElements.age, userElements.description, userElements.bandsList);
+    return card;
 }
-
-const populateElements = (user, userElements) => {
-    userElements.user_name.textContent = user.user_name;
-    userElements.age.textContent = user.age;
-    userElements.description.textContent = user.description;
-    userElements.bands.textContent = user.bands;
-
-    const bandList = user.fav_music.bands.map(e => {
-        const pElement = document.createElement('p');
-        pElement.textContent = e;
-        return pElement;
-    })
-
-    userElements.bands = bandList;
-    return userElements;
-}
-/*
-users.fav_music.bands.forEach(((band) => {
-    const li= document.createElement('li');
-    li.textContent = band;
-    ul.appendChild(li);
-}));
-*/
-
-
-const renderElements = (card, elements) => {
-    card.append(elements.user_name, elements.age, elements.description, elements.bands);
-}
-
 
 users.forEach(user => {
-    const card = createCard();
-    const userElements = createDescription();
-
-    const elementsWithData = populateElements(user, userElements);
-    renderElements(card, elementsWithData);
-    CARD_SECTION.append(card);
-
+    const card = userInfo(user);
+    CARD_SECTION.appendChild(card);
 })
 
 
@@ -97,8 +60,41 @@ users.forEach(user => {
 // 2. Obtener la info del usuario desde inputs y mostrar en tarjetas
 // Al menos deben tener 2 commits
 
-const profileBtn = document.getElementById('ProfileBtn');
+const newUser = (usuario) => {
+    const card = document.createElement('div');
+    card.classList.add('profile', 'container');
+    const userElements = {
+        userName: document.createElement('h2'),
+        description: document.createElement('h3'),
+        age: document.createElement('p')
+    };
+    userElements.userName.textContent = usuario.userName;
+    userElements.description.textContent = usuario.description;
+    userElements.age.textContent = usuario.age;
 
-profileBtn.addEventListener('click', () => {
-    userName.textContent = inputName.value;
-})
+    card.append(userElements.userName, userElements.description, userElements.age);
+    return card;
+}
+
+
+const addBTN = document.getElementById('profileBtn');
+    addBTN.addEventListener('click', () => {
+    const inputName = document.getElementById('name');
+    const inputDescription = document.getElementById('description');
+    const inputAge = document.getElementById('age');
+    
+    const newUser = {
+        user_name: inputName.value,
+        description: inputDescription.value,
+        age: inputAge.value,
+        
+    };
+
+    const newUserCard = newUserewUser(newUser);
+    CARD_SECTION.appendChild(newUserCard);
+
+    inputName.value = "";
+    inputAge.value = "";
+    inputEmail.value = "";
+
+});
